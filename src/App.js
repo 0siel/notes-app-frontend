@@ -1,23 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function App() {
+  const [notes, setNotes] = useState([]);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  const fetchNotes = async () => {
+    const response = await axios.get(
+      "https://incredible-notes-app-32df6015f60c.herokuapp.com/api/notes"
+    );
+    setNotes(response.data);
+  };
+
+  const addNote = async (e) => {
+    e.preventDefault();
+    const newNote = { title, content };
+    await axios.post(
+      "https://incredible-notes-app-32df6015f60c.herokuapp.com/api/notes",
+      newNote
+    );
+    fetchNotes();
+    setTitle("");
+    setContent("");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Notes App</h1>
+      <form onSubmit={addNote}>
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <textarea
+          placeholder="Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
+        <button type="submit">Add Note</button>
+      </form>
+      <div>
+        {notes.map((note) => (
+          <div key={note._id}>
+            <h2>{note.title}</h2>
+            <p>{note.content}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
