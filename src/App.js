@@ -12,7 +12,7 @@ function App() {
 
   const fetchNotes = async () => {
     const response = await axios.get(
-      "https://incredible-notes-app-32df6015f60c.herokuapp.com/api/notes"
+      "https://incredible-notes-app-32df6015f60c.herokuapp.com"
     );
     setNotes(response.data);
   };
@@ -21,7 +21,7 @@ function App() {
     e.preventDefault();
     const newNote = { title, content };
     await axios.post(
-      "https://incredible-notes-app-32df6015f60c.herokuapp.com/api/notes",
+      "https://incredible-notes-app-32df6015f60c.herokuapp.com",
       newNote
     );
     fetchNotes();
